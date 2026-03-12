@@ -21,7 +21,7 @@
         <Authors>Alchyr</Authors>
         <PackageReleaseNotes>new mod structure</PackageReleaseNotes>
         <PackageTags>c#</PackageTags>
-        <NoWarn>$(NoWarn);NU5128</NoWarn>
+        <NoWarn>$(NoWarn);NU5128;MSB3270</NoWarn>
 
         <RepositoryUrl>https://github.com/Alchyr/BaseLib-StS2</RepositoryUrl>
         <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
@@ -100,13 +100,14 @@
         <None Include=".gitignore" />
         <None Include="Notes.txt" />
         <None Include="export_presets.cfg" />
+        <None Include="BaseLib.json" />
     </ItemGroup>
 
     <ItemGroup>
         <!-- For including in .nupkg for template to auto export to mods folder -->
         <Content Include="build\BaseLib.props" PackagePath="/Content/" />
-        <Content Include="build\BaseLib.pck" PackagePath="/Content/" />
-        <Content Include="BaseLib.json" PackagePath="/Content/" />
+        <Content Include="build\$(MSBuildProjectName).pck" PackagePath="/Content/" />
+        <Content Include="$(MSBuildProjectName).json" PackagePath="/Content/" />
     </ItemGroup>
 
     <ItemGroup>
@@ -116,7 +117,7 @@
     <Target Name="CopyToModsFolderOnBuild" AfterTargets="PostBuildEvent">
         <Message Text="Copying .dll and manifest to mods folder." Importance="high" />
         <Copy SourceFiles="$(TargetPath)" DestinationFolder="$(Sts2Path)/mods/$(MSBuildProjectName)/" />
-        <Copy SourceFiles="BaseLib.json" DestinationFolder="$(Sts2Path)/mods/$(MSBuildProjectName)/" />
+        <Copy SourceFiles="$(MSBuildProjectName).json" DestinationFolder="$(Sts2Path)/mods/$(MSBuildProjectName)/" />
     </Target>
 
     <Target Name="GodotPublish" AfterTargets="Publish" Condition="'$(GodotPath)' != '' and Exists('$(GodotPath)') and '$(IsInnerGodotExport)' != 'true'">
@@ -134,7 +135,7 @@
 
     <Target Name="UpdateManifestVersion" BeforeTargets="Publish">
       <PropertyGroup>
-        <ManifestPath>$(MSBuildProjectDirectory)\mod_manifest.json</ManifestPath>
+        <ManifestPath>$(MSBuildProjectDirectory)\$(MSBuildProjectName).json</ManifestPath>
       </PropertyGroup>
 
       <PropertyGroup>
