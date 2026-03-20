@@ -339,6 +339,7 @@ public abstract partial class ModConfig
             Theme = PreloadManager.Cache.GetAsset<Theme>(SettingsTheme),
             AutoSizeEnabled = false,
             MouseFilter = Control.MouseFilterEnum.Ignore,
+            FocusMode = Control.FocusModeEnum.None,
             BbcodeEnabled = true,
             ScrollActive = false,
             VerticalAlignment = VerticalAlignment.Center,

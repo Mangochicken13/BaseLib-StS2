@@ -31,6 +31,7 @@ public partial class NConfigOptionRow : MarginContainer
         AddThemeConstantOverride("margin_left", 24);
         AddThemeConstantOverride("margin_right", 24);
         MouseFilter = MouseFilterEnum.Pass;
+        FocusMode = FocusModeEnum.None;
         CustomMinimumSize = new Vector2(0, 64);
 
         label.CustomMinimumSize = new Vector2(0, 64);

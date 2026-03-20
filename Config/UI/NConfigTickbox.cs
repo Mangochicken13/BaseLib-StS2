@@ -11,26 +11,17 @@ public partial class NConfigTickbox : NSettingsTickbox
 
     public NConfigTickbox()
     {
-        SetCustomMinimumSize(new Vector2(64, 64));
+        SetCustomMinimumSize(new Vector2(320, 64));
         SizeFlagsHorizontal = SizeFlags.ShrinkEnd;
         SizeFlagsVertical = SizeFlags.Fill;
+        FocusMode = FocusModeEnum.All;
+        MouseFilter = MouseFilterEnum.Pass;
     }
     
     public override void _Ready()
     {
         if (_property == null) throw new Exception("NConfigTickbox added to tree without an assigned property");
         ConnectSignals();
-
-        var tickboxVisuals = GetNode<Control>("%TickboxVisuals");
-        tickboxVisuals.SetAnchorsAndOffsetsPreset(LayoutPreset.CenterRight, LayoutPresetMode.KeepSize);
-
-        if (GetParent() is MarginContainer parentContainer)
-        {
-            // Hacky, but aligns it properly with dropdowns and sliders. Likely needed due to transparent pixels
-            // in the graphic.
-            parentContainer.AddThemeConstantOverride("margin_right", parentContainer.GetThemeConstant("margin_right") - 10);
-        }
-
         SetFromProperty();
     }
 
