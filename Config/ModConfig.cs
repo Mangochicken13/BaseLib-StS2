@@ -145,6 +145,11 @@ public abstract partial class ModConfig
 
     private void Init()
     {
+        foreach (var property in ConfigProperties)
+        {
+            _defaultValues.TryAdd(property.Name, property.GetValue(null));
+        }
+
         if (File.Exists(_path)) Load();
         else Save(); // Save default values
     }
@@ -189,6 +194,7 @@ public abstract partial class ModConfig
         {
             // During testing, I have never seen an exception here, but let's avoid a game crash/menu hang, etc.
             ModConfigLogger.Error($"Failed to save config {_modConfigName}: unknown error during conversion.", false);
+            return;
         }
 
         try
@@ -219,8 +225,11 @@ public abstract partial class ModConfig
 
         try
         {
-            using var fileStream = File.OpenRead(_path);
-            var values = JsonSerializer.Deserialize<Dictionary<string, string>>(fileStream);
+            Dictionary<string, string>? values;
+            using (var fileStream = File.OpenRead(_path))
+            {
+                values = JsonSerializer.Deserialize<Dictionary<string, string>>(fileStream);
+            }
 
             if (values == null)
             {
@@ -231,9 +240,6 @@ public abstract partial class ModConfig
             {
                 foreach (var property in ConfigProperties)
                 {
-                    // Save the default value if this is the first load
-                    _defaultValues.TryAdd(property.Name, property.GetValue(null));
-
                     if (!values.TryGetValue(property.Name, out var value))
                     {
                         // Missing value; might be due to a new mod version, etc. Re-save later to fill it in.
