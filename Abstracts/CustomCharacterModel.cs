@@ -96,7 +96,7 @@ public abstract class CustomCharacterModel : CharacterModel, ICustomModel, ILoca
 
     /// <summary>
     /// Override and return a CreatureAnimator if you need to set up states that differ from the default for your character.
-    /// Using <seealso cref="SetupAnimationState"/> is suggested.
+    /// Using SetupAnimationState<seealso cref="SetupAnimationState"/> is suggested.
     /// </summary>
     /// <returns></returns>
     public virtual CreatureAnimator? SetupCustomAnimationStates(MegaSprite controller)
@@ -105,7 +105,7 @@ public abstract class CustomCharacterModel : CharacterModel, ICustomModel, ILoca
     }
 
     /// <summary>
-    /// If you have a spine animation without all the required animations,
+    /// If you have a Spine animation without all the required animations,
     /// use this method to set up a controller that will use animations of your choice for each animation.
     /// Any omitted animation parameters will default to the idle animation.
     /// </summary>
@@ -184,7 +184,7 @@ public class EnergyCounterOutlineColorPatch {
     private static readonly FieldInfo? PlayerProp = typeof(NEnergyCounter).GetField("_player", BindingFlags.NonPublic | BindingFlags.Instance);
 
     static bool Prefix(NEnergyCounter __instance, ref Color __result) {
-        if (PlayerProp?.GetValue(__instance) is Player player && player.Character is CustomCharacterModel model && model.CustomEnergyCounter is CustomEnergyCounter counter) {
+        if (PlayerProp?.GetValue(__instance) is Player player && player.Character is CustomCharacterModel model && model.CustomEnergyCounter is { } counter) {
             __result = counter.OutlineColor;
             return false;
         }
@@ -210,12 +210,12 @@ class EnergyCounterPatch {
                 return false;
             }
             
-            if (model.CustomEnergyCounterPath != null)
+            /*if (model.CustomEnergyCounterPath != null)
             {
                 __result = NodeFactory<NEnergyCounter>.CreateFromScene(model.CustomEnergyCounterPath);
                 PlayerField?.SetValue(__result, player);
                 return false;
-            }
+            }*/
         }
         catch (Exception e)
         {
@@ -402,7 +402,7 @@ class RestSiteAnimPath
     }
 }
 
-[HarmonyPatch(typeof(CharacterModel), "MerchantAnimPath", MethodType.Getter)]
+[HarmonyPatch(typeof(CharacterModel), nameof(CharacterModel.MerchantAnimPath), MethodType.Getter)]
 class MerchantAnimPath
 {
     [HarmonyPrefix]
