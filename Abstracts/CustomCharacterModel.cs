@@ -11,6 +11,7 @@ using BaseLib.Extensions;
 using BaseLib.Patches.Content;
 using BaseLib.Utils.NodeFactories;
 using MegaCrit.Sts2.Core.Helpers;
+using MegaCrit.Sts2.Core.Nodes.Screens.Shops;
 
 namespace BaseLib.Abstracts;
 
@@ -170,6 +171,7 @@ public abstract class CustomCharacterModel : CharacterModel, ICustomModel, ILoca
     {
         CustomVisualPath?.RegisterSceneForConversion<NCreatureVisuals>();
         CustomEnergyCounterPath?.RegisterSceneForConversion<NEnergyCounter>();
+        CustomMerchantAnimPath?.RegisterSceneForConversion<NMerchantCharacter>();
     }
 }
     
