@@ -100,6 +100,16 @@ public abstract class ConstructedCardModel(
         WithEnergyTip();
         return this;
     }
+
+    /// <summary>
+    /// Generates a <seealso cref="HealVar"/>HealVar with given base value.
+    /// </summary>
+    protected ConstructedCardModel WithHeal(int baseVal, int upgrade = 0)
+    {
+        var dynVar = new HealVar(baseVal).WithUpgrade(upgrade);
+        _constructedDynamicVars.Add(dynVar);
+        return this;
+    }
     
     /// <summary>
     /// Generates a <seealso cref="PowerVar{T}"/>PowerVar and adds a tooltip. You can also just pass a PowerVar to <seealso cref="WithVars"/>WithVars.
