@@ -10,7 +10,7 @@ public class CustomCalculatedVar : CalculatedVar
 {
     public CustomCalculatedVar(string name) : base(name)
     {
-        BaseLibMain.Logger.Info($"CustomCalculatedVar: {Name}");
+        
     }
 
     protected override DynamicVar GetBaseVar()

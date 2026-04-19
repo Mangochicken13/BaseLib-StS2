@@ -15,7 +15,6 @@ public class CustomCalculatedBlockVar : CalculatedBlockVar
     public CustomCalculatedBlockVar(string name, ValueProp props) : base(props)
     {
         _nameSetter?.Invoke(this, name);
-        BaseLibMain.Logger.Info($"CustomCalculatedBlockVar: {Name}");
     }
 
     protected override DynamicVar GetBaseVar()

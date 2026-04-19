@@ -15,7 +15,6 @@ public class CustomCalculatedDamageVar : CalculatedDamageVar
     public CustomCalculatedDamageVar(string name, ValueProp props) : base(props)
     {
         _nameSetter?.Invoke(this, name);
-        BaseLibMain.Logger.Info($"CustomCalculatedDamageVar: {Name}");
     }
 
     protected override DynamicVar GetBaseVar()
