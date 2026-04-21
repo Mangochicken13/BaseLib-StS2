@@ -19,6 +19,8 @@ class AfterCardPlayedPatch
         var originalTask = __result;
         __result = Task.Run(async () =>
         {
+            await originalTask;
+            
             var refundAmount = cardPlay.Card.DynamicVars.TryGetValue(RefundVar.Key, out var val) ? val.IntValue : 0;
             if (refundAmount > 0 && cardPlay.Resources.EnergySpent > 0)
             {
@@ -33,8 +35,6 @@ class AfterCardPlayedPatch
                     await CardPileCmd.RemoveFromDeck(deckCard, false);
                 }
             }
-            
-            await originalTask;
         });
     }
 }
