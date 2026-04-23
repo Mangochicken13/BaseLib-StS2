@@ -59,12 +59,24 @@ public static class UpdateGhostTextPatch
     [HarmonyTranspiler]
     public static IEnumerable<CodeInstruction> RemovePushError(IEnumerable<CodeInstruction> instructions)
     {
-        var toString = AccessTools.Method(typeof(DefaultInterpolatedStringHandler), nameof(DefaultInterpolatedStringHandler.ToStringAndClear));
-
-        return (List<CodeInstruction>)new InstructionPatcher(instructions)
-            .Match(new InstructionMatcher().call(toString))
-            .Replace(new CodeInstruction(OpCodes.Nop))
-            .Step()
-            .Replace(new CodeInstruction(OpCodes.Nop)); 
+         var pushError = AccessTools.Method(typeof(GD), nameof(GD.PushError), [typeof(string)]);
+         var codes = instructions.ToList();
+        
+         for (var i = 0; i < codes.Count; i++)
+         {
+             if (!codes[i].Calls(pushError)) continue;
+             for (var j = i; j >= 0; j--)
+             { 
+                 if (codes[j].opcode != OpCodes.Brtrue_S && codes[j].opcode != OpCodes.Brtrue) continue;
+                 for (var k = j + 1; k <= i; k++)
+                 {
+                     codes[k].opcode = OpCodes.Nop;
+                     codes[k].operand = null;
+                 }
+                 break;
+             }
+             break;
+         }
+         return codes;
     }
 }
