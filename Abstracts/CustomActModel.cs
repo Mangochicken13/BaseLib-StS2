@@ -21,7 +21,7 @@ using NCustomTreasureRoomChest = BaseLib.BaseLibScenes.Acts.NCustomTreasureRoomC
 
 namespace BaseLib.Abstracts;
 
-public abstract class CustomActModel : ActModel, ICustomModel
+public abstract class CustomActModel : ActModel, ICustomModel, ISceneConversions
 {
     public int ActNumber { get; }
 
@@ -52,7 +52,6 @@ public abstract class CustomActModel : ActModel, ICustomModel
 
     public override string ChestSpineResourcePath =>
         "res://animations/backgrounds/treasure_room/chest_room_act_3_skel_data.tres";
-
     public override string ChestSpineSkinNameNormal => "act3";
     public override string ChestSpineSkinNameStroke => "act3_stroke";
     public override string ChestOpenSfx => "event:/sfx/ui/treasure/treasure_act3";
@@ -150,8 +149,10 @@ public abstract class CustomActModel : ActModel, ICustomModel
     protected abstract string CustomRestSiteBackgroundPath { get; }
 
     /// <summary>
-    /// Override this if you want to replace the chest-visuals in Treasure Rooms.<br></br>
-    /// The scenes root node <b>must</b> have a script attached that derives from <see cref="NCustomTreasureRoomChest"/> <br></br>
+    /// Override this if you want to replace the chest visuals in Treasure Rooms.<br></br>
+    /// The scene's root node must have a script attached that derives from <see cref="NCustomTreasureRoomChest"/> or have no script at all.<br></br>
+    /// If making custom visuals you will most likely want to make a custom script inheriting NCustomTreasureRoomChest to allow for
+    /// reactivity to player actions.
     /// </summary>
     public virtual string? CustomChestScene => null;
 
@@ -310,6 +311,11 @@ public abstract class CustomActModel : ActModel, ICustomModel
         ModelDb.AncientEvent<Tanx>(),
         ModelDb.AncientEvent<Vakuu>()
     ];
+
+    public void RegisterSceneConversions()
+    {
+        CustomChestScene?.RegisterSceneForConversion<NCustomTreasureRoomChest>();
+    }
 }
 
 // Currently that method has no body so this patch is preemptive to when they add something
