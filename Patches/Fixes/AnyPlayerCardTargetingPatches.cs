@@ -34,7 +34,8 @@ internal static class AnyPlayerCardTargetingHelper
 [HarmonyPatch(typeof(CardModel), nameof(CardModel.IsValidTarget))]
 internal static class CardModelIsValidTargetAnyPlayerPatch
 {
-    private static bool Prefix(CardModel __instance, Creature? target, ref bool __result)
+    [HarmonyPrefix]
+    private static bool CheckValidPlayerTarget(CardModel __instance, Creature? target, ref bool __result)
     {
         if (__instance.TargetType != TargetType.AnyPlayer)
             return true;
@@ -60,7 +61,8 @@ internal static class NCardPlayTryPlayCardAnyPlayerPatch
     private static readonly Action<NCardPlay, bool>? CleanupBool = CreateCleanupBool();
     private static readonly Action<NCardPlay>? CleanupVoid = CreateCleanupVoid();
 
-    private static bool Prefix(NCardPlay __instance, Creature? target)
+    [HarmonyPrefix]
+    private static bool TryPlayAnyPlayer(NCardPlay __instance, Creature? target)
     {
         var card = __instance.Card;
         if (!IsAnyPlayerMultiplayer(card))
@@ -136,7 +138,8 @@ internal static class NCardPlayTryPlayCardAnyPlayerPatch
 [HarmonyPatch(typeof(NMouseCardPlay), "TargetSelection")]
 internal static class NMouseCardPlayTargetSelectionAnyPlayerPatch
 {
-    private static bool Prefix(NMouseCardPlay __instance, TargetMode targetMode, ref Task __result)
+    [HarmonyPrefix]
+    private static bool AnyPlayerTargeting(NMouseCardPlay __instance, TargetMode targetMode, ref Task __result)
     {
         if (!IsAnyPlayerMultiplayer(__instance.Card))
             return true;
@@ -162,7 +165,8 @@ internal static class NMouseCardPlayTargetSelectionAnyPlayerPatch
 [HarmonyPatch(typeof(NControllerCardPlay), nameof(NControllerCardPlay.Start))]
 internal static class NControllerCardPlayStartAnyPlayerPatch
 {
-    private static bool Prefix(NControllerCardPlay __instance)
+    [HarmonyPrefix]
+    private static bool ControllerCardPlay(NControllerCardPlay __instance)
     {
         if (!IsAnyPlayerMultiplayer(__instance.Card))
             return true;
@@ -202,7 +206,8 @@ internal static class NControllerCardPlayStartAnyPlayerPatch
 [HarmonyPatch(typeof(NControllerCardPlay), "SingleCreatureTargeting")]
 internal static class NControllerCardPlaySingleTargetingAnyPlayerPatch
 {
-    private static bool Prefix(NControllerCardPlay __instance, TargetType targetType, ref Task __result)
+    [HarmonyPrefix]
+    private static bool ControllerTargeting(NControllerCardPlay __instance, TargetType targetType, ref Task __result)
     {
         if (targetType != TargetType.AnyPlayer)
             return true;
@@ -294,7 +299,8 @@ internal static class NControllerCardPlaySingleTargetingAnyPlayerPatch
 [HarmonyPatch(typeof(CardCmd), nameof(CardCmd.AutoPlay))]
 internal static class CardCmdAutoPlayAnyPlayerPatch
 {
-    private static void Prefix(CardModel card, ref Creature? target)
+    [HarmonyPrefix]
+    private static void RandomAnyPlayer(CardModel card, ref Creature? target)
     {
         if (card.TargetType != TargetType.AnyPlayer || target != null)
             return;
