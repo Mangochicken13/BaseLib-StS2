@@ -1,6 +1,7 @@
 using System.Reflection;
 using System.Text;
 using BaseLib.Abstracts;
+using BaseLib.Extensions;
 using BaseLib.Utils;
 using BaseLib.Utils.Patching;
 using HarmonyLib;
@@ -66,14 +67,14 @@ public static class CustomContentDictionary
     {
         if (!RegisterType(encounter.GetType())) return;
 
-        CustomEncounters.Add(encounter);
+        CustomEncounters.InsertSorted(encounter);
     }
 
     public static void AddAncient(CustomAncientModel ancient)
     {
         if (!RegisterType(ancient.GetType())) return;
         
-        CustomAncients.Add(ancient);
+        CustomAncients.InsertSorted(ancient);
     }
     
     public static void AddEvent(CustomEventModel eventModel)
@@ -82,11 +83,11 @@ public static class CustomContentDictionary
 
         if (eventModel.Acts.Length == 0)
         {
-            SharedCustomEvents.Add(eventModel);
+            SharedCustomEvents.InsertSorted(eventModel);
         }
         else
         {
-            ActCustomEvents.Add(eventModel);
+            ActCustomEvents.InsertSorted(eventModel);
         }
     }
 
@@ -103,7 +104,7 @@ public static class CustomContentDictionary
     {
         if (!RegisterType(actModel.GetType())) return;
         
-        CustomActs.Add(actModel);
+        CustomActs.InsertSorted(actModel);
     }
     
     private static bool IsValidPool(Type modelType, Type poolType)
