@@ -217,7 +217,6 @@ public abstract class DynamicBadge : Badge
     public override BadgeRarity Rarity => _baseBadge.Rarity(_run, _localPlayer);
 }
 
-[HarmonyPatch(typeof(BadgePool), nameof(BadgePool.CreateAll))]
 internal class CustomBadgesPatch
 {
     public static void Patch(Harmony harmony)
