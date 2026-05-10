@@ -326,6 +326,7 @@ class GenEnumValues
                 CustomPiles.RegisterCustomPile((PileType) pileType, () => (CustomPile) constructor.Invoke(null));
             }
 
+            // CustomReward Registration
             if (field.FieldType == typeof(RewardType) && t.IsAssignableTo(typeof(CustomReward)))
             {
                 if (t.CreateInstance() is not CustomReward dummyReward)

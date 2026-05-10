@@ -16,6 +16,7 @@ internal static class CustomRewardPatches
     {
         if (_RewardTypeDeserializers.ContainsKey(type))
         {
+            // Maybe just warn instead?
             throw new NotSupportedException($"Registering multiple rewards of the same type ({type}) is not supported");
         }
 
