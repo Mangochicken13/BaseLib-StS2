@@ -16,11 +16,10 @@ internal static class CustomRewardPatches
     {
         if (_RewardTypeDeserializers.ContainsKey(type))
         {
-            BaseLibMain.Logger.Error($"Registering multiple rewards of the same type ({type}) is not supported");
             throw new NotSupportedException($"Registering multiple rewards of the same type ({type}) is not supported");
         }
 
-        BaseLibMain.Logger.Info($"Registering RewardType {nameof(type)}");
+        BaseLibMain.Logger.Info($"Registering RewardType {nameof(type)} from {deserializer.GetType().Assembly}");
         _RewardTypeDeserializers.Add(type, deserializer);
     }
 
@@ -30,7 +29,7 @@ internal static class CustomRewardPatches
     {
         if (_RewardTypeDeserializers.Keys.Contains(save.RewardType))
         {
-            BaseLibMain.Logger.Debug($"Found RewardType {save.RewardType} ({(int) save.RewardType}) in registry from mod {_RewardTypeDeserializers[save.RewardType].Method.GetType().Assembly}");
+            BaseLibMain.Logger.Debug($"Found RewardType {save.RewardType} ({(int) save.RewardType}) in registry from mod {_RewardTypeDeserializers[save.RewardType].GetType().Assembly}");
 
             var method = _RewardTypeDeserializers[save.RewardType];
             __result = method.Invoke(save, player);
