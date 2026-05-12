@@ -39,12 +39,12 @@ public static class CustomAnimation
     {
         if (_animHandler[n] == null)
         {
+            BaseLibMain.Logger.Debug("Looking for Godot animation player");
             _animHandler[n] = FindNode<AnimationPlayer>(n)?.UseAnimationPlayer() ??
                               FindNode<AnimatedSprite2D>(n)?.UseAnimatedSprite2D() ??
                               SearchRecursive<AnimationPlayer>(n)?.UseAnimationPlayer() ??
                               SearchRecursive<AnimatedSprite2D>(n)?.UseAnimatedSprite2D() ??
                               NoAnimation;
-
         }
         return _animHandler[n]?.Invoke(tryAnimNames) != null;
     }

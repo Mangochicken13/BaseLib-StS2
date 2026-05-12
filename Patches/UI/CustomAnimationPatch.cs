@@ -19,7 +19,7 @@ static class CustomAnimationPatch
     {
         if (__instance.Entity.Player?.Character is CustomCharacterModel character)
         {
-            if (CustomAnimation.HasCustomAnimation(__instance.Visuals))
+            if (CustomAnimation.HasCustomAnimation(__instance))
             {
                 __result = Math.Min(character.DeathAnimTime, 30f);
             }
@@ -37,7 +37,7 @@ static class CustomAnimationPatch
 
     static async Task WaitCustomAnim(NCreature __instance)
     {
-        if (CustomAnimation.PlayCustomAnimation(__instance.Visuals, CreatureAnimator.deathTrigger, "die"))
+        if (CustomAnimation.PlayCustomAnimation(__instance, CreatureAnimator.deathTrigger, "die"))
         {
             if (__instance.Entity.Player?.Character is CustomCharacterModel character)
             {
@@ -53,7 +53,7 @@ static class CustomAnimationPatch
     {
         if (__instance.HasSpineAnimation) return true;
 
-        return !CustomAnimation.PlayCustomAnimation(__instance.Visuals, "revive", "Revive");
+        return !CustomAnimation.PlayCustomAnimation(__instance, "revive", "Revive");
     }
 
     [HarmonyPatch(typeof(NCreature), nameof(NCreature.SetAnimationTrigger))]
@@ -61,6 +61,8 @@ static class CustomAnimationPatch
     static bool SendTriggerToOtherAnimators(NCreature __instance, string trigger)
     {
         if (__instance.HasSpineAnimation) return true;
+        
+        BaseLibMain.Logger.Info($"SetAnimationTrigger called for {trigger} without spine animation");
             
         var animName = trigger switch
         {
@@ -72,8 +74,6 @@ static class CustomAnimationPatch
             _ => trigger.ToLowerInvariant()
         };
 
-        var visualNodeRoot = __instance.Visuals;
-            
-        return !CustomAnimation.PlayCustomAnimation(visualNodeRoot, animName, trigger);
+        return !CustomAnimation.PlayCustomAnimation(__instance, animName, trigger, trigger.ToLowerInvariant());
     }
 }
